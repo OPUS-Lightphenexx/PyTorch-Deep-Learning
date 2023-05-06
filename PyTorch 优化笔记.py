@@ -23,22 +23,22 @@ class LinearRegression(nn.Module):
 Model = LinearRegression(10,10)
 print(Model)
 #优化损失函数
-iteration = 500
-LR = 0.01
+iteration = 100
+LR = 0.08
 opt = torch.optim.SGD(Model.parameters(),lr=LR)
 criterion = nn.MSELoss()
 #优化开始
 iteration_list = []
 loss_list = []
 for epoch in range(iteration):
-    y_pred = Model(x_data)  # forward:predict
-    loss = criterion(y_pred,y_data)  # forward: loss
+    y_pred = Model(x_data)
+    loss = criterion(y_pred,y_data)
     print(epoch,loss.item())
     iteration_list.append(epoch)
     loss_list.append(loss.item())
 
     opt.zero_grad()
-    loss.backward()  # backward: autograd，自动计算梯度
+    loss.backward()
     opt.step()
 
 plt.plot(iteration_list,loss_list)
@@ -66,17 +66,18 @@ criterion = nn.MSELoss()
 iteration_list = []
 loss_list = []
 for epoch in range(iteration):
-    y_pred = Model(x_data)  # forward:predict
-    loss = criterion(y_pred,y_data)  # forward: loss
+    y_pred = Model(x_data)
+    loss = criterion(y_pred,y_data)
     print(epoch,loss.item())
     iteration_list.append(epoch)
     loss_list.append(loss.item())
 
     opt.zero_grad()
-    loss.backward()  # backward: autograd，自动计算梯度
+    loss.backward()
     opt.step()
 
 plt.plot(iteration_list,loss_list)
+plt.xlabel('Iteration')
 plt.grid()
 plt.show()
 
