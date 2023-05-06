@@ -8,6 +8,7 @@ print(Test_GPU)
 x = torch.randn(3,4)
 print(x)
 x_data = torch.randn(1,10)
+print(x_data)
 noise = torch.randn(x_data.size())
 y_data = 2*x_data+1+0.5*noise
 #定义一个线性回归神经网络
@@ -42,6 +43,8 @@ for epoch in range(iteration):
     opt.step()
 
 plt.plot(iteration_list,loss_list)
+plt.title('Optimizing The Loss Function(Linear) Using SGD')
+plt.xlabel('Iteration')
 plt.grid()
 plt.show()
 
@@ -77,6 +80,7 @@ for epoch in range(iteration):
     opt.step()
 
 plt.plot(iteration_list,loss_list)
+plt.title('Optimizing The Loss Function(Sigmoid) Using SGD')
 plt.xlabel('Iteration')
 plt.grid()
 plt.show()
