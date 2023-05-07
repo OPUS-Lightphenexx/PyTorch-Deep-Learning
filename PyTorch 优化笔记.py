@@ -15,10 +15,10 @@ y_data = 2*x_data+1+0.5*noise
 class LinearRegression(nn.Module):
     def __init__(self,input_dim,output_dim):
         super(LinearRegression,self).__init__()
-        self.predict = nn.Linear(input_dim,output_dim)
+        self.hidden1 = nn.Linear(input_dim,output_dim)
 
     def forward(self,x):
-        y_predict = self.predict(x)
+        y_predict = self.hidden1(x)
         return y_predict
 
 Model = LinearRegression(10,10)
@@ -34,7 +34,6 @@ loss_list = []
 for epoch in range(iteration):
     y_pred = Model(x_data)
     loss = criterion(y_pred,y_data)
-    print(epoch,loss.item())
     iteration_list.append(epoch)
     loss_list.append(loss.item())
 
@@ -48,7 +47,9 @@ plt.xlabel('Iteration')
 plt.grid()
 plt.show()
 
-#
+
+x_test = torch.linspace(0,2,10)
+#-----------------------------------------------------------
 class Sigmoid(nn.Module):
     def __init__(self):
         super(Sigmoid,self).__init__()
@@ -71,7 +72,6 @@ loss_list = []
 for epoch in range(iteration):
     y_pred = Model(x_data)
     loss = criterion(y_pred,y_data)
-    print(epoch,loss.item())
     iteration_list.append(epoch)
     loss_list.append(loss.item())
 
@@ -86,5 +86,70 @@ plt.grid()
 plt.show()
 
 
-#运行模型
+#笔记
+import numpy as np
+import matplotlib.pyplot as plt
+import torch as t
+def get_data(x, w, b, d):
+    c, r = x.shape
+    y = (w*x + b * x**2 + d) + (1.3 * (2 * np.random.rand(c, r) - 1))
+    return (y)
+
+
+xs = np.arange(0, 3, 0.01).reshape(-1, 1)
+ys = get_data(xs, 1, -2, 3)
+
+xs = t.Tensor(xs)
+ys = t.Tensor(ys)
+
+
+class Fit_model(t.nn.Module):
+    def __init__(self):
+        super(Fit_model, self).__init__()
+        self.linear1 = t.nn.Linear(1, 16)
+        self.relu = t.nn.ReLU()
+        self.linear2 = t.nn.Linear(16, 1)
+
+        self.criterion = t.nn.MSELoss()
+        self.opt = t.optim.SGD(self.parameters(), lr=0.01)
+
+    def forward(self, input):
+        y = self.linear1(input)
+        y = self.relu(y)
+        y = self.linear2(y)
+        return y
+
+
+model = Fit_model()
+iteration_list1 = []
+loss_list1 = []
+for e in range(2000):
+    y_pre = model(xs)
+
+    loss1 = model.criterion(y_pre, ys)
+
+    # Zero gradients
+    model.opt.zero_grad()
+    # perform backward pass
+    loss1.backward()
+    model.opt.step()
+    iteration_list1.append(e)
+    loss_list1.append(loss1.item())
+
+ys_pre = model(xs)
+
+plt.title("Fit Curve Using Neural Network")
+plt.scatter(xs.data.numpy(), ys.data.numpy())
+plt.plot(xs.data.numpy(), ys_pre.data.numpy(),color='red')
+plt.grid()
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.show()
+plt.plot(iteration_list1,loss_list1)
+plt.title('Optimizing the Loss Function')
+plt.grid()
+plt.show()
+
+
+print(ys_pre)
 
