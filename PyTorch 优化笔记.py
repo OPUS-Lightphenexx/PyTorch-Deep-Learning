@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
+import torch.nn.functional as F
 
 Test_GPU = torch.cuda.is_available()
 print(Test_GPU)
@@ -111,7 +112,7 @@ class Fit_model(t.nn.Module):
         self.linear2 = t.nn.Linear(16, 1)
 
         self.criterion = t.nn.MSELoss()
-        self.opt = t.optim.SGD(self.parameters(), lr=0.01)
+        self.opt = t.optim.SGD(self.parameters(), lr=0.05)
 
     def forward(self, input):
         y = self.linear1(input)
@@ -141,6 +142,7 @@ ys_pre = model(xs)
 plt.title("Fit Curve Using Neural Network")
 plt.scatter(xs.data.numpy(), ys.data.numpy())
 plt.plot(xs.data.numpy(), ys_pre.data.numpy(),color='red')
+#--------------------------------------------------------------------------------------------------
 plt.grid()
 plt.xlabel('X')
 plt.ylabel('Y')
